@@ -40,9 +40,19 @@ public class User extends BaseEntity<Long> {
     @Column(name = User.EMAIL)
     private String email;
 
-    @Column(name = User.IS_CONFIRMED )
+    @Column(name = User.IS_CONFIRMED)
     private boolean isConfirmed;
 
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", nationalCode='" + nationalCode + '\'' +
+                ", userType=" + userType +
+                ", email='" + email + '\'' +
+                ", isConfirmed=" + isConfirmed +
+                '}';
+    }
 }
