@@ -34,6 +34,7 @@ public class User extends BaseEntity<Long> {
     private String nationalCode;
 
     @Column(name = User.USERTYPE)
+    @Enumerated(EnumType.STRING)
     private UserType userType;
 
     @Column(name = User.EMAIL)
