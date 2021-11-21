@@ -1,9 +1,6 @@
-package ir.maktab.examination_online_system.models.base;
+package ir.maktab.examination_online_system.base;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
@@ -13,13 +10,13 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass
-@Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class BaseEntity<ID extends Serializable> implements Serializable {
+@Getter
+public class BaseEntity<PK extends Serializable> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private ID id;
+    private PK id;
+
+
 }
