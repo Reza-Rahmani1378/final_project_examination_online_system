@@ -38,7 +38,7 @@
 
             <h2> ${msg} <em>God Luck</em></h2>
             <div class="main-button scroll-to-section">
-                <a href="professorWorkBench">Back To Work Bench</a>
+                <a href="adminWorkBench">Back To Work Bench</a>
             </div>
         </div>
     </div>

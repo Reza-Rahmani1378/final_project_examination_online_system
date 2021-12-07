@@ -71,7 +71,7 @@
         <table class="table text-center table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
-                <th colspan="7" align="center">Available Exams</th>
+                <th colspan="8" align="center">Available Exams</th>
             </tr>
             </thead>
 
@@ -82,7 +82,7 @@
                 <td>Title Of Exam</td>
                 <td>Description Of Exam</td>
                 <td>Time Of Exam(Minuets)</td>
-                <td colspan="3">Selection</td>
+                <td colspan="4">Selection</td>
 
             </tr>
 
@@ -95,6 +95,7 @@
                     <td><a href="listOfQuestionsOfExam?examId=${exam.id}">Questions</a></td>
                     <td><a href=editExam?examId=${exam.id}&&courseId=${courseId}>Edit</a></td>
                     <td><a href=deleteExam?examId=${exam.id}>Delete</a></td>
+                    <td><a href=examResult?examId=${exam.id}>View test results</a></td>
                 </tr>
             </c:forEach>
             </tbody>

@@ -70,7 +70,7 @@
         <table class="table text-center table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
-                <th colspan="8" align="center">Available Questions</th>
+                <th colspan="9" align="center">Available Questions</th>
             </tr>
             </thead>
 
@@ -82,7 +82,7 @@
                 <td>Question Text</td>
                 <td>Type</td>
                 <td>Score</td>
-                <td colspan="2">Selection</td>
+                <td colspan="3">Selection</td>
 
             </tr>
 
@@ -92,7 +92,17 @@
                     <td>${exam.questionTitle}</td>
                     <td>${exam.questionText}</td>
                     <td>${exam.questionType.name()}</td>
-                    <td>${exam.questionScores.get(0)}</td>
+                    <form action="${pageContext.request.contextPath}/question-rest/change-score" method="post">
+                        <td>
+                            <input name="grade" type="number" value="${exam.questionScores.get(0)}"
+                                   min="0">
+                        </td>
+                        <td>
+                            <input type="hidden" name="questionId" value="${exam.id}">
+                            <input type="hidden" name="examId" value="${examId}">
+                            <input type="submit" value="Record the Score">
+                        </td>
+                    </form>
                     <td><a href=editQuestion?questionId=${exam.id}&&examId=${examId}>Edit</a></td>
                     <td><a href=deleteQuestionOfExam?examId=${exam.id}>Delete</a></td>
                 </tr>
@@ -108,6 +118,13 @@
         window.location = "listOfCourses";
     }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/assets/js/changeQuestionScore.js"></script>
 
 </body>
 </html>

@@ -19,11 +19,7 @@ import java.util.Set;
 public class Student extends User {
     public static final String TABLE_NAME = "student_table";
     public static final String STUDENT_NUMBER = "student_number";
-    public static final String IS_ALLOWED_FOR_EXAM = "is_allow_for_exam";
-    @Column(name = Student.IS_ALLOWED_FOR_EXAM, columnDefinition = "TINYINT(1) default 1")
-    public boolean isAllowedForExam;
-    @ManyToMany(mappedBy = "students")
-    private List<Course> courses;
+
 
     public Student(String firstName, String lastName,
                    String username, String nationalCode,

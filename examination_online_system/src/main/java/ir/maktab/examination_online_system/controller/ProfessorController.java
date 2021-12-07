@@ -14,14 +14,17 @@ import ir.maktab.examination_online_system.services.*;
 import ir.maktab.examination_online_system.services.dto.ExamDTO;
 import ir.maktab.examination_online_system.services.dto.QuestionsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -109,13 +112,18 @@ public class ProfessorController {
 
     // get id for edit exam
     @RequestMapping(value = "/editExam")
-    private String editExam(@RequestParam(value = "examId") Long examId,
+    private String editExam(HttpServletRequest request, @RequestParam(value = "examId") Long examId,
                             @RequestParam(value = "courseId") Long courseId, Model model) {
 
         // pass the question bank to the edit exam and send to the another jsp file for add question to the exam.
 
         QuestionBank questionBank = questionBankService.getQuestionBankByCourseId(courseId);
-        List<Questions> questions = questionsService.getQuestionsByQuestionBankId(questionBank.getId());
+        List<Questions> questions = (List<Questions>) questionsService.getQuestionsByQuestionBankId(questionBank.getId());
+        PagedListHolder pagedListHolder = new PagedListHolder(questions);
+        int page = ServletRequestUtils.getIntParameter(request, "p", 1);
+        pagedListHolder.setPage(page);
+        pagedListHolder.setPageSize(5);
+        model.addAttribute("pagedListHolder", pagedListHolder);
         model.addAttribute("examId", examId);
         model.addAttribute("courseId", courseId);
         model.addAttribute("questions", questions);
@@ -149,7 +157,7 @@ public class ProfessorController {
     // get examId from view exams of course and find all questions exam that we find it
     @RequestMapping(value = "/listOfQuestionsOfExam")
     private String getQuestionsByExamId(@RequestParam(value = "examId") Long examId, Model model) {
-        List<Questions> questions = questionsService.findAllByExamId(examId);
+        Set<Questions> questions = questionsService.findAllByExamId(examId);
         model.addAttribute("questions", questions);
         model.addAttribute("examId", examId);
         return "listOfQuestionsOfExamProfessor";
@@ -195,7 +203,7 @@ public class ProfessorController {
         Set<QuestionOption> questionOptions = new HashSet<>();
         for (String option : options) {
             QuestionOption questionOption = QuestionOption.builder()
-                    .optionText(option)
+                    .options(option)
                     .build();
             questionOptions.add(questionOption);
         }
@@ -213,6 +221,9 @@ public class ProfessorController {
         Exam exam = examService.findByIdNotSecure(examId).get();
         Questions questions = questionsService.findByIdNotSecure(questionId).get();
         questions.getExams().add(exam);
+        QuestionScore<Long> questionScore = new QuestionScore<>();
+        questionScore.setExamId(examId);
+        questions.getQuestionScores().add(questionScore);
         questionsService.saveNotSecure(questions);
         model.addAttribute("msg", "Question Added To Exam Successfully");
         return "successAddedQuestion";
@@ -251,6 +262,22 @@ public class ProfessorController {
         questionsService.editQuestions(questionId, questionsDTO, questionScore.longValue(), examId, QuestionType.OPTIONAL, options);
         model.addAttribute("msg", "Question Edited Successfully");
         return "successEditedQuestion";
+    }
+
+    // view test result of exam with examId that send from the front
+    @RequestMapping(value = "/examResult")
+    public String examResult(@RequestParam(value = "examId") Long examId, Model model) {
+        Set<Questions> questions = questionsService.findAllByExamId(examId);
+        model.addAttribute("questions", questions);
+
+        return "examResult";
+    }
+
+    @RequestMapping(value = "/findQuestionByStudentResultExamId")
+    public String findQuestionByStudentResultExamId(@RequestParam(value = "studentResultExamId") Long studentResultExamId, Model model) {
+        Questions questions = questionsService.findByStudentResultExamsId(studentResultExamId);
+        model.addAttribute("question", questions);
+        return "questionAnswers";
     }
 
 

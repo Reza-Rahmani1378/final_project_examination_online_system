@@ -42,4 +42,9 @@ public class CourseServiceImpl extends BaseServiceImpl<Course, Long, CourseRepos
     public List<Course> findCoursesByProfessorId(Long id) {
         return super.repository.findCoursesByProfessorId(id);
     }
+
+    @Override
+    public Iterable<Course> findCoursesByStudentId(Long studentId) {
+        return repository.findCoursesByStudentId(studentId);
+    }
 }

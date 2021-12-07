@@ -26,7 +26,6 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final String SHOW_REGISTRATION_PAGE = "Inside showRegistrationPage()";
-    private static final String INSIDE_HEADER = "Inside header()";
     private static final String INSIDE_HOME = "Inside home()";
     private static final String INSIDE_LOGIN = "Inside login()";
     private static final String INSIDE_REGISTER = "Inside register(@ModelAttribute(userDTO) UserDTO userDTO)";
@@ -57,8 +56,9 @@ public class UserController {
 
     // start the program with url in browser
     @RequestMapping(value = "/home")
-    private String home() {
+    private String home(Model model) {
         LOGGER.info(INSIDE_HOME);
+        model.addAttribute("msg", "sdafljadf");
         return "home/home";
     }
 
@@ -80,6 +80,8 @@ public class UserController {
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
     public String register(@ModelAttribute("userDTO") UserDTO userDTO) {
         LOGGER.info(INSIDE_REGISTER);
+        userDTO.setId(10L);
+
         User user = userMapper.convertDTOToEntity(userDTO);
 
 
@@ -114,25 +116,29 @@ public class UserController {
     public String specifyUserType() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> user = userService.getUserByUsername(username);
-        UserType userType = user.get().getUserType();
-        switch (userType) {
-            case ADMIN -> {
-                // Get Type Of User; if Type is Admin We Redirect to the Admin Controller
-                LOGGER.info(INSIDE_HEADER_ADMIN);
-                return "redirect:/admin/adminWorkBench";
+        if (user.isPresent()) {
+            UserType userType = user.get().getUserType();
+            switch (userType) {
+                case ADMIN -> {
+                    // Get Type Of User; if Type is Admin We Redirect to the Admin Controller
+                    LOGGER.info(INSIDE_HEADER_ADMIN);
+                    return "redirect:/admin/adminWorkBench";
+                }
+                case PROFESSOR -> {
+                    // Get Type Of User; if Type is Professor We Redirect to the Professor Controller
+                    LOGGER.info(INSIDE_HEADER_PROFESSOR);
+                    return "redirect:/professor/professorWorkBench";
+                }
+                case STUDENT -> {
+                    // Get Type Of User; if Type is Student We Redirect to the Student Controller
+                    LOGGER.info(INSIDE_HEADER_STUDENT);
+                    return "redirect:/student/studentWorkBench";
+                }
             }
-            case PROFESSOR -> {
-                // Get Type Of User; if Type is Professor We Redirect to the Professor Controller
-                LOGGER.info(INSIDE_HEADER_PROFESSOR);
-                return "redirect:/professor/professorWorkBench";
-            }
-            case STUDENT -> {
-                // Get Type Of User; if Type is Student We Redirect to the Student Controller
-                LOGGER.info(INSIDE_HEADER_STUDENT);
-                return "redirect:/student/studentWorkBench";
-            }
+
         }
         return "home/home";
     }
-
 }
+
+

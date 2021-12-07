@@ -5,6 +5,9 @@ import ir.maktab.examination_online_system.exception.AccessDeniedRunTimeExceptio
 import ir.maktab.examination_online_system.models.User;
 import ir.maktab.examination_online_system.repositories.UserRepository;
 import ir.maktab.examination_online_system.services.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
         return super.saveAllNotSecure(collection);
     }
 
+
     @Override
     public void deleteByIdNotSecure(Long id) {
         super.deleteByIdNotSecure(id);
@@ -54,5 +58,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long, UserRepository>
             return super.repository.findAll();
         }
         return super.repository.finAll(keyword);
+    }
+
+    @Override
+    public String getUsername() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

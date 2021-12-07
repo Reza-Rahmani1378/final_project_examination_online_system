@@ -4,12 +4,17 @@ import ir.maktab.examination_online_system.base.service.impl.BaseServiceImpl;
 import ir.maktab.examination_online_system.exception.AccessDeniedRunTimeException;
 import ir.maktab.examination_online_system.models.Exam;
 import ir.maktab.examination_online_system.models.Questions;
+import ir.maktab.examination_online_system.models.StudentResultExam;
 import ir.maktab.examination_online_system.models.embeddable.QuestionOption;
 import ir.maktab.examination_online_system.models.embeddable.QuestionScore;
 import ir.maktab.examination_online_system.models.enumeration.QuestionType;
 import ir.maktab.examination_online_system.repositories.QuestionsRepository;
+import ir.maktab.examination_online_system.resource.mapper.extra.QuestionsDTOMapper;
 import ir.maktab.examination_online_system.services.QuestionsService;
+import ir.maktab.examination_online_system.services.StudentResultExamService;
 import ir.maktab.examination_online_system.services.dto.QuestionsDTO;
+import ir.maktab.examination_online_system.services.dto.extra.QuestionDTOList;
+import ir.maktab.examination_online_system.services.dto.extra.StudentAnswersDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +42,15 @@ public class QuestionsServiceImpl extends BaseServiceImpl<Questions, Long, Quest
     private static final String IN_SIDE_FIND_ALL_BY_EXAM_ID = "Inside in findAllByExamId(Long examId)";
     private static final String IN_SIDE_SAVE_WITH_DEFAULT_SCORE = "Inside in saveWithDefaultScore(Questions questions, Exam exam)";
 
+
+    private final QuestionsDTOMapper questionsDTOMapper;
+    private final StudentResultExamService studentResultExamService;
+
     @Autowired
-    public QuestionsServiceImpl(QuestionsRepository repository) {
+    public QuestionsServiceImpl(QuestionsRepository repository, QuestionsDTOMapper questionsDTOMapper, StudentResultExamService studentResultExamService) {
         super(repository);
+        this.questionsDTOMapper = questionsDTOMapper;
+        this.studentResultExamService = studentResultExamService;
     }
 
     @Override
@@ -86,13 +97,13 @@ public class QuestionsServiceImpl extends BaseServiceImpl<Questions, Long, Quest
     }
 
     @Override
-    public List<Questions> getQuestionsByQuestionBankId(Long id) {
+    public Iterable<Questions> getQuestionsByQuestionBankId(Long id) {
         LOGGER.info(IN_SIDE_GET_QUESTIONS_BY_QUESTION_BANK_ID);
         return repository.getQuestionsByQuestionBankId(id);
     }
 
     @Override
-    public List<Questions> findAllByExamId(Long examId) {
+    public Set<Questions> findAllByExamId(Long examId) {
         LOGGER.info(IN_SIDE_FIND_ALL_BY_EXAM_ID);
         return repository.findAllByExamId(examId);
     }
@@ -103,9 +114,6 @@ public class QuestionsServiceImpl extends BaseServiceImpl<Questions, Long, Quest
         List<Exam> exams = new ArrayList<>();
         exams.add(exam);
         questions.setExams(exams);
-//        QuestionScore<Long> questionScore = new QuestionScore<>();
-//        questionScore.setExamId(exam.getId());
-//        questionScore.setQuestionScore(20L);
         List<QuestionScore<Long>> questionScores = new ArrayList<>();
         questionScores.add(questionScore);
         questions.setQuestionScores(questionScores);
@@ -114,6 +122,7 @@ public class QuestionsServiceImpl extends BaseServiceImpl<Questions, Long, Quest
 
     @Override
     public Questions editQuestions(Long questionsId, QuestionsDTO questionsDTO, Long questionScore, Long examId, QuestionType questionType, List<String> options) {
+
         Questions questions = repository.findById(questionsId).get();
         questions.setQuestionType(questionType);
         questions.setQuestionTitle(questionsDTO.getQuestionTitle());
@@ -127,21 +136,77 @@ public class QuestionsServiceImpl extends BaseServiceImpl<Questions, Long, Quest
         questionScore1.setExamId(examId);
         questions.getQuestionScores().add(questionScore1);
         if (questionType == QuestionType.DESCRIPTIVE) {
-            questions.setQuestionAnswer(null);
+            questions.setQuestionAnswer(questionsDTO.getQuestionAnswer());
             questions.getQuestionOptions().clear();
         } else {
             Set<QuestionOption> questionOptions = new HashSet<>();
             for (String option : options) {
                 QuestionOption questionOption = QuestionOption.builder()
-                        .optionText(option)
+                        .options(option)
                         .build();
                 questionOptions.add(questionOption);
             }
+            questions.setQuestionAnswer(questionsDTO.getQuestionAnswer());
             questions.setQuestionOptions(questionOptions);
         }
         return repository.save(questions);
 
 
+    }
+
+    @Override
+    public Set<QuestionDTOList> getQuestionDTOList(Set<Questions> questions) {
+        Set<QuestionDTOList> questionDTOLists = new HashSet<>();
+        for (Questions question : questions) {
+            QuestionDTOList questionDTOList = new QuestionDTOList();
+            if (question.getQuestionType().name().equals("DESCRIPTIVE")) {
+                questionDTOList.setId(question.getId());
+                questionDTOList.setHeader(question.getQuestionText());
+                questionDTOList.setType(question.getQuestionType().name());
+            } else {
+                questionDTOList.setId(question.getId());
+                questionDTOList.setHeader(question.getQuestionText());
+                for (QuestionOption option : question.getQuestionOptions()) {
+                    questionDTOList.getOptions().add(option);
+                }
+                questionDTOList.setType(question.getQuestionType().name());
+            }
+            questionDTOLists.add(questionDTOList);
+        }
+
+        return questionDTOLists;
+    }
+
+    @Override
+    public void saveResult(List<StudentAnswersDTO> studentAnswersDTOS) {
+        for (StudentAnswersDTO studentAnswersDTO : studentAnswersDTOS) {
+            Questions questions = repository.findById(studentAnswersDTO.getId()).get();
+            StudentResultExam studentResultExam = studentResultExamService.saveStudentAnswers(questions, studentAnswersDTO);
+            questions.getStudentResultExams().add(studentResultExam);
+            saveNotSecure(questions);
+
+        }
+    }
+
+    @Override
+    public Questions findByStudentResultExamsId(Long studentResultExamId) {
+        return repository.findByStudentResultExamsId(studentResultExamId);
+    }
+
+    @Override
+    public Questions findByQuestionsIdAndExamId(Long id, Long examId) {
+        return repository.findByQuestionsIdAndExamId(id, examId);
+    }
+
+    @Override
+    public void saveChangeScore(Long questionId, Long examId, Long grade) {
+        Questions questions = findByQuestionsIdAndExamId(questionId, examId);
+        questions.getQuestionScores().remove(0);
+        questions.getQuestionScores().add(QuestionScore.<Long>builder()
+                .questionScore(grade)
+                .examId(examId)
+                .build());
+        saveNotSecure(questions);
     }
 
 

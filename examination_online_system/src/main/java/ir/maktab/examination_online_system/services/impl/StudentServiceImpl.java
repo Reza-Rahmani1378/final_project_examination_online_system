@@ -26,11 +26,6 @@ public class StudentServiceImpl extends BaseServiceImpl<Student, Long, StudentRe
     }
 
     @Override
-    public Student saveInfo(Student student) {
-        return super.saveNotSecure(student);
-    }
-
-    @Override
     public Student saveNotSecure(Student student) {
 
         student.setPassword(NoOpPasswordEncoder.getInstance().encode(student.getPassword()));

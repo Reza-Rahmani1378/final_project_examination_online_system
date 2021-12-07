@@ -16,5 +16,5 @@ public class QuestionOption {
     private static final String OPTION_TEXT = "option_text";
     @Lob
     @Column(name = QuestionOption.OPTION_TEXT)
-    private String optionText;
+    private String options;
 }

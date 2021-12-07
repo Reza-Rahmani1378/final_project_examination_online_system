@@ -1,0 +1,20 @@
+body {
+    background-image: url("/assets/img/score3.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+}
+
+table,
+th,
+td {
+    font-size: 23px;
+    text-align: center;
+    color: green;
+    border: 3px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    width: 100%;
+}

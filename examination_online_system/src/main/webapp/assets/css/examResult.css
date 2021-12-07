@@ -1,0 +1,99 @@
+body {
+    background-image: url("/assets/img/login-back.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #ba8b10;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ba8b00;
+}
+
+tbody tr {
+    background-image: url(/assets/img/th.jfif);
+    background-repeat: no-repeat;
+
+}
+
+table {
+    background-color: #00ECB9;
+}
+
+thead,
+tfoot {
+    background: url(/assets/img/images.jfif);
+    color: white;
+    text-shadow: 1px 1px 1px black;
+}
+
+thead th,
+tfoot th,
+tfoot td {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+    border: 3px solid #b3d7ff;
+}
+
+html {
+    font-family: 'helvetica neue', helvetica, arial, sans-serif;
+}
+
+thead th,
+tfoot th {
+    font-family: 'Rock Salt', cursive;
+}
+
+th {
+    letter-spacing: 2px;
+}
+
+td {
+    letter-spacing: 1px;
+}
+
+tbody td {
+    text-align: center;
+}
+
+tfoot th {
+    text-align: right;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid beige;
+}
+
+thead th:nth-child(1) {
+    width: 30%;
+}
+
+thead th:nth-child(2) {
+    width: 20%;
+}
+
+thead th:nth-child(3) {
+    width: 15%;
+}
+
+thead th:nth-child(4) {
+    width: 35%;
+}
+
+th {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: large;
+    color: #0b2e13;
+    padding: 25px;
+}
+
+td {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: large;
+    padding: 25px;
+}

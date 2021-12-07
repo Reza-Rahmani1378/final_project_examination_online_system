@@ -52,11 +52,11 @@
         <form action="${pageContext.request.contextPath}/login" method="post" class="form-3">
             <p class="clearfix">
                 <label for="login">Username</label>
-                <input type="text" name="username" id="login" placeholder="Username">
+                <input type="text" name="username" id="login" placeholder="Username" required>
             </p>
             <p class="clearfix">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="password" name="password" id="password" placeholder="Password" required>
             </p>
             <p class="clearfix">
                 <input type="checkbox" name="remember" id="remember">

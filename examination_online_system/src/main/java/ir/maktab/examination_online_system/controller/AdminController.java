@@ -8,10 +8,12 @@ import ir.maktab.examination_online_system.models.User;
 import ir.maktab.examination_online_system.models.enumeration.UserType;
 import ir.maktab.examination_online_system.resource.mapper.CourseMapper;
 import ir.maktab.examination_online_system.resource.mapper.UserMapper;
+import ir.maktab.examination_online_system.resource.mapper.extra.ChangeStatusUserMapper;
 import ir.maktab.examination_online_system.services.CourseService;
 import ir.maktab.examination_online_system.services.UserService;
 import ir.maktab.examination_online_system.services.dto.CourseDTO;
 import ir.maktab.examination_online_system.services.dto.UserDTO;
+import ir.maktab.examination_online_system.services.dto.extra.ChangeStatusUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,18 +39,21 @@ public class AdminController {
     private static final String MESSAGE_ADD_USER_TO_COURSE = "Your User Added Successfully";
     private final UserService userService;
     private final UserMapper userMapper;
+    private final ChangeStatusUserMapper changeStatusUserMapper;
     private final CourseMapper courseMapper;
     private final CourseService courseService;
 
     @Autowired
     public AdminController(UserService userService, UserMapper userMapper,
                            CourseMapper courseMapper,
-                           CourseService courseService) {
+                           CourseService courseService,
+                           ChangeStatusUserMapper changeStatusUserMapper) {
 
         this.userService = userService;
         this.userMapper = userMapper;
         this.courseMapper = courseMapper;
         this.courseService = courseService;
+        this.changeStatusUserMapper = changeStatusUserMapper;
     }
 
     // Get Type Of User; if Type is Admin We Redirect to the Admin Controller
@@ -114,6 +120,13 @@ public class AdminController {
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String confirmAddedCourse(@ModelAttribute("courseDTO") CourseDTO courseDTO, Model model) {
         LOGGER.info("inside addCourse() in AdminController");
+        LocalDate now = LocalDate.now();
+        LocalDate startCourse = courseDTO.getStartCourse();
+        LocalDate endCourse = courseDTO.getEndCourse();
+        if (startCourse.compareTo(now) < 0 || endCourse.compareTo(now) < 0 || endCourse.compareTo(startCourse) < 0) {
+            model.addAttribute("msg", "Dates for start or end course is not valid please try again..");
+            return "addCourse";
+        }
         Course course = courseMapper.convertDTOToEntity(courseDTO);
         courseService.saveNotSecure(course);
         model.addAttribute("msg", MESSAGE);
@@ -153,6 +166,28 @@ public class AdminController {
     public String editUser(@RequestParam(value = "userId") Long userId, Model model) {
         model.addAttribute("userId", userId);
         return "editUser";
+    }
+
+    @RequestMapping(value = "/confirmEditUser")
+    public String confirmEditUser(Model model, @ModelAttribute(value = "changeStatusUserDTO") ChangeStatusUserDTO changeStatusUserDTO
+            , @RequestParam(value = "userId") Long userId) {
+        User editUser = userService.findByIdNotSecure(userId).get();
+        if (changeStatusUserDTO.getIsConfirmed().equals("YES"))
+            editUser.setConfirmed(true);
+        else
+            editUser.setConfirmed(false);
+        editUser.setUserType(changeStatusUserDTO.getUserType());
+        model.addAttribute("msg", "User Edited Successfully");
+        userService.saveNotSecure(editUser);
+        return "successEditedUser";
+
+    }
+
+    @RequestMapping(value = "/deleteUser")
+    public String deleteUserById(Model model, @RequestParam(value = "userId") Long userId) {
+        userService.deleteByIdNotSecure(userId);
+        model.addAttribute("msg", "User Deleted Successfully");
+        return "successDeleteUser";
     }
 
 

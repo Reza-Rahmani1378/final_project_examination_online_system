@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@page isELIgnored="false" %>
 <html>
 <head>
@@ -25,7 +27,7 @@
     <form action="/professor/confirmEditExam" method="post" style="max-width: 600px; margin: 0 auto;">
         <div class="m-3">
             <div class="form-group row">
-                <label class="col-4 col-form-label">Title: </label>
+                <label class="col-4  col-form-label">Title: </label>
                 <div class="col-8">
                     <input class="form-control" type="text" name="description"/>
                 </div>

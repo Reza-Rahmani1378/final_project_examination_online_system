@@ -71,4 +71,9 @@ public class ExamServiceImpl extends BaseServiceImpl<Exam, Long, ExamRepository>
     public List<Exam> getExamsByCourseId(Long id) {
         return super.repository.getExamsByCourseId(id);
     }
+
+    @Override
+    public List<Exam> findExamsByCourseId(Long id) {
+        return repository.findExamsByCourseId(id);
+    }
 }

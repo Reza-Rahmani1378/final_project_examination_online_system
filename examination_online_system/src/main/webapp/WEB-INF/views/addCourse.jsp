@@ -1,60 +1,60 @@
 <%--
   Created by IntelliJ IDEA.
   User: ASUS CENTER QOM
-  Date: 11/4/2021
-  Time: 3:02 PM
+  Date: 11/11/2021
+  Time: 9:20 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Add Course</title>
-    <%-- <link crossorigin="anonymous" href="/assets/css/bootstrap.min.css"
-           integrity="sha384-MCw98/SFnGE8fJT3GXwEOnesV7Zt27NXFooApmYm81iuXoPkFOJwJ8ERedskinLPMO" rel="stylesheet">
-     <link href="/assets/css/assets/owl.carousel.css" rel="stylesheet">
-     <link href="/assets/assets/owl.theme.default.css" rel="stylesheet">
-     <link href="/assets/main.css" rel="stylesheet">--%>
+    <link href="${pageContext.request.contextPath}/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css"/>
+    <script src="${pageContext.request.contextPath}/webjars/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/webjars/bootstrap/4.3.1/js/bootstrap.min.js"
+            type="text/javascript"></script>
+    <link href="${pageContext.request.contextPath}/assets/css/tableCss.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<%--<%@include file="header.jsp"%>--%>
+<div class="container text-center">
 
-<form action="success" method="post" style="max-width: 350px">
-    <div>
-        <h3>
-            Add Course
-        </h3>
-        <div>
-            <label>Title Of Course</label>
-            <label>
-                <input type="text" class="btn-dark form-controller" name="titleCourse">
-            </label>
-        </div>
+    <h1 class="error" style="color: red">${msg}</h1>
+    <form action="${pageContext.request.contextPath}/admin/success" method="post"
+          style="max-width: 600px; margin: 0 auto;">
+        <div class="m-3">
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Title: </label>
+                <div class="col-8">
+                    <input class="form-control" type="text" name="titleCourse"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Start Course: </label>
+                <div class="col-8">
+                    <input class="form-control" type="date" name="startCourse"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">End Course: </label>
+                <div class="col-8">
+                    <input class="form-control" required type="date" name="endCourse"/>
+                </div>
+            </div>
 
 
-        <div>
-            <label>Start Course</label>
             <div>
-                <label>
-                    <input autocomplete="off" name="startCourse" type="date"/>
-                </label>
+                <button class="btn-dark" type="submit">Add Course</button>
             </div>
         </div>
-
-        <div>
-            <label>End Course</label>
-            <div>
-                <label>
-                    <input autocomplete="off" name="endCourse" type="date"/>
-                </label>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div>
-            <button type="submit">Add Course</button>
-        </div>
-    </div>
-</form>
+    </form>
+</div>
 
 </body>
 </html>
+
+
+<%--
+endCourse , startCourse , titleCourse
+--%>

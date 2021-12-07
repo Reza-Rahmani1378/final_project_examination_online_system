@@ -53,6 +53,7 @@
                         <li class="scroll-to-section"><a href="listOfUsers" class="active">List of Users</a></li>
                         <li class="scroll-to-section"><a href="listOfCourses">List Of Courses</a></li>
                         <li class="scroll-to-section"><a href="#our-classes">Profile</a></li>
+                        <li class="scroll-to-section"><a href="/logout">Logout</a></li>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>

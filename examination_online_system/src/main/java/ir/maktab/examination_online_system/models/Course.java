@@ -1,5 +1,6 @@
 package ir.maktab.examination_online_system.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ir.maktab.examination_online_system.base.BaseEntity;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,9 +30,13 @@ public class Course extends BaseEntity<Long> {
 
     @Column(name = Course.TITLE_COURSE)
     public String titleCourse;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = Course.START_COURSE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public LocalDate startCourse;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = Course.END_COURSE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public LocalDate endCourse;
@@ -49,12 +54,6 @@ public class Course extends BaseEntity<Long> {
     @JoinColumn(name = "professor_id")
     private Professor professor;
 
-//    @OneToOne
-//    private QuestionBank questionBank;
-
-
-//    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-//    private List<Exam> exams = new ArrayList<>();
 
 
 }

@@ -9,4 +9,6 @@ public interface ExamService extends BaseService<Exam, Long> {
 
     List<Exam> getExamsByCourseId(Long id);
 
+    List<Exam> findExamsByCourseId(Long id);
+
 }

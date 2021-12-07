@@ -78,15 +78,16 @@
         <source src="${pageContext.request.contextPath}/assets/img/online.mp4" type="video/mp4"/>
     </video>
 
-    <div class="video-overlay header-text">
-        <div class="caption">
+        <div class="video-overlay header-text">
+            <div class="caption">
 
-            <h2>welcome to online <em>exam</em></h2>
-            <div class="main-button scroll-to-section">
-                <a href="#features">Become a member</a>
+
+                <h2>welcome to online <em>exam</em></h2>
+                <div class="main-button scroll-to-section">
+                    <a href="/showReg">Become a member</a>
+                </div>
             </div>
         </div>
-    </div>
 </div>
 
 <!-- ***** Contact Us Area Ends ***** -->

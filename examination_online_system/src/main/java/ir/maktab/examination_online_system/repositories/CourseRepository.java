@@ -24,5 +24,9 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
     @EntityGraph(attributePaths = "professor")
     List<Course> findCoursesByProfessorId(Long id);
 
+    @EntityGraph(attributePaths = "students")
+    @Query(value = "from Course c join c.students s where s.id = ?1")
+    Iterable<Course> findCoursesByStudentId(Long studentId);
+
 
 }

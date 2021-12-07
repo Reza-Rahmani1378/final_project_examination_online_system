@@ -43,6 +43,10 @@ public class Questions extends BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "question_options", joinColumns = @JoinColumn(name = "question_d"))
+    private Set<QuestionOption> questionOptions;
+
     @ManyToOne
     private QuestionBank questionBank;
 
@@ -58,10 +62,20 @@ public class Questions extends BaseEntity<Long> {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "question_scores", joinColumns = @JoinColumn(name = "question_id"))
     private List<QuestionScore<Long>> questionScores;
+    @OneToMany
+    private List<StudentResultExam> studentResultExams;
 
-    @ElementCollection
-    @CollectionTable(name = "question_options", joinColumns = @JoinColumn(name = "question_d"))
-    private Set<QuestionOption> questionOptions;
+    @Override
+    public String toString() {
+        return "Questions{" +
+                "questionTitle='" + questionTitle + '\'' +
+                ", questionText='" + questionText + '\'' +
+                ", questionAnswer='" + questionAnswer + '\'' +
+                ", questionType=" + questionType +
+                ", questionScores=" + questionScores +
+                ", questionOptions=" + questionOptions +
+                '}';
+    }
 
 
 }

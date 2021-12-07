@@ -13,4 +13,6 @@ public interface CourseService extends BaseService<Course, Long> {
 
     List<Course> findCoursesByProfessorId(Long id);
 
+    Iterable<Course> findCoursesByStudentId(Long studentId);
+
 }

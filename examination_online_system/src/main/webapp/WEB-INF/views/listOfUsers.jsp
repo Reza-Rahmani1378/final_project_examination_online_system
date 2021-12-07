@@ -76,7 +76,7 @@
                             <td>${user.nationalCode}</td>
                             <td>${user.userType}</td>
                             <td>${user.confirmed}</td>
-                            <td class="btn btn-dark"><a href="editUser?userId=${user.id}">Delete</a></td>
+                            <td class="btn btn-dark"><a href="deleteUser?userId=${user.id}">Delete</a></td>
                             <td class="btn btn-dark"><a href="editUser?userId=${user.id}">Edit</a></td>
                             <td class="btn btn-dark"><a href="addUser?userId=${user.id}">Add To Course</a></td>
                         </div>
