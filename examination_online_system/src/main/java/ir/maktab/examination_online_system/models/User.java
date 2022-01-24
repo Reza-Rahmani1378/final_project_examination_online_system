@@ -47,6 +47,9 @@ public class User extends BaseEntity<Long> {
     @Column(name = User.EMAIL, unique = true)
     private String email;
 
+    private String fullName;
+
+
     @Column(name = User.IS_CONFIRMED, columnDefinition = "TINYINT(1) default 0")
     private boolean isConfirmed;
 
